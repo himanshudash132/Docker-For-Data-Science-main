@@ -1,75 +1,61 @@
-Docker-For-Data-Science 🐳🔬
+# Docker-For-Data-Science 🐳🔬
 
-Welcome to Docker-For-Data-Science, a comprehensive guide to using Docker in your data projects! 🚀
+Welcome to **Docker-For-Data-Science**, a comprehensive guide to using Docker in your data projects! 🚀
 
-📋 Table of Contents
+---
 
-🚀 Introduction
+## 📋 Table of Contents
 
-📦 What are Docker & Containers?
+1. [🚀 Introduction](#🚀-introduction)
+2. [📦 What are Docker & Containers?](#📦-what-are-docker--containers)
+3. [🖼️ Images vs. Containers](#🖼️-images-vs-containers)
+4. [🖥️ Docker vs. Virtual Machines](#🖥️-docker-vs-virtual-machines)
+5. [🛠️ Installation](#🛠️-installation)
+6. [📸 Creating Docker Images](#📸-creating-docker-images)
+7. [📤 Pushing Images to Docker Hub](#📤-pushing-images-to-docker-hub)
+8. [🤝 Docker Compose](#🤝-docker-compose)
 
-🖼️ Images vs. Containers
+---
 
-🖥️ Docker vs. Virtual Machines
+## 🚀 Introduction
 
-🛠️ Installation
+Docker empowers data scientists to **package** their workflows—code, libraries, and dependencies—into portable containers that run consistently across any environment. Whether you’re training ML models on your laptop or deploying pipelines in the cloud, Docker ensures **reproducibility** and **scalability** in your data projects.
 
-📸 Creating Docker Images
+---
 
-📤 Pushing Images to Docker Hub
+## 📦 What are Docker & Containers?
 
-🤝 Docker Compose
+A **container** is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. Docker is the leading platform for building, sharing, and running these containers, providing a CLI and daemon to manage images and containers seamlessly.
 
-🚀 Introduction
+---
 
-Docker empowers data scientists to package their workflows—code, libraries, and dependencies—into portable containers that run consistently across any environment. Whether you’re training ML models on your laptop or deploying pipelines in the cloud, Docker ensures reproducibility and scalability in your data projects.
+## 🖼️ Images vs. Containers
 
-📦 What are Docker & Containers?
+* **Docker Image**: A **read-only template** (snapshot) containing instructions (Dockerfile) for creating containers.
+* **Docker Container**: A **runtime instance** of an image; isolated, writable, and encapsulating the environment defined in the image.
 
-A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. Docker is the leading platform for building, sharing, and running these containers, providing a CLI and daemon to manage images and containers seamlessly.
+> Think of an image as a class and a container as an object instantiated from that class. 🏷️➡️📦
 
-🖼️ Images vs. Containers
+---
 
-Docker Image: A read-only template (snapshot) containing instructions (Dockerfile) for creating containers.
+## 🖥️ Docker vs. Virtual Machines
 
-Docker Container: A runtime instance of an image; isolated, writable, and encapsulating the environment defined in the image.
+| Feature               | Virtual Machine      | Docker Container         |
+| --------------------- | -------------------- | ------------------------ |
+| **Boot Time**         | Minutes              | Seconds                  |
+| **Resource Overhead** | High (full guest OS) | Low (shared host kernel) |
+| **Isolation Level**   | Hardware-level       | Process-level            |
 
-Think of an image as a class and a container as an object instantiated from that class. 🏷️➡️📦
+* **Virtual Machine**: Emulates an entire machine (guest OS + virtual hardware) on top of a host system.
+* **Docker Container**: Shares the host OS kernel via isolated user-space instances. Lightweight, faster to start, and more resource-efficient.
 
-🖥️ Docker vs. Virtual Machines
+---
 
-Feature
+## 🛠️ Installation
 
-Virtual Machine
+Follow the [official Docker Engine docs](https://docs.docker.com/engine/install/) to install on Linux, Windows, or macOS. Example for Ubuntu:
 
-Docker Container
-
-Boot Time
-
-Minutes
-
-Seconds
-
-Resource Overhead
-
-High (full guest OS)
-
-Low (shared host kernel)
-
-Isolation Level
-
-Hardware-level
-
-Process-level
-
-Virtual Machine: Emulates an entire machine (guest OS + virtual hardware) on top of a host system.
-
-Docker Container: Shares the host OS kernel via isolated user-space instances. Lightweight, faster to start, and more resource-efficient.
-
-🛠️ Installation
-
-Follow the official Docker Engine docs to install on Linux, Windows, or macOS. Example for Ubuntu:
-
+```bash
 # Update package index
 sudo apt-get update
 
@@ -94,46 +80,61 @@ echo \
 
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
 
-📸 Creating Docker Images
+---
 
-Write a Dockerfile
+## 📸 Creating Docker Images
 
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-CMD ["python", "train.py"]
+1. **Write a Dockerfile**
 
-Build the image
+   ```dockerfile
+   FROM python:3.11-slim
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+   COPY . .
+   CMD ["python", "train.py"]
+   ```
+2. **Build the image**
 
-docker build -t yourusername/ds-project:latest .
+   ```bash
+   docker build -t yourusername/ds-project:latest .
+   ```
+3. **Verify**
 
-Verify
+   ```bash
+   docker images
+   ```
 
-docker images
+---
 
-📤 Pushing Images to Docker Hub
+## 📤 Pushing Images to Docker Hub
 
-Log in
+1. **Log in**
 
-docker login
+   ```bash
+   docker login
+   ```
+2. **Tag** (if needed)
 
-Tag (if needed)
+   ```bash
+   docker tag ds-project:latest yourusername/ds-project:latest
+   ```
+3. **Push**
 
-docker tag ds-project:latest yourusername/ds-project:latest
+   ```bash
+   docker push yourusername/ds-project:latest
+   ```
+4. **Verify** on [Docker Hub](https://hub.docker.com/).
 
-Push
+---
 
-docker push yourusername/ds-project:latest
+## 🤝 Docker Compose
 
-Verify on Docker Hub.
+Use **Docker Compose** to define and run **multi-container** apps via a `docker-compose.yml`:
 
-🤝 Docker Compose
-
-Use Docker Compose to define and run multi-container apps via a docker-compose.yml:
-
+```yaml
 version: '3.8'
 services:
   web:
@@ -142,11 +143,16 @@ services:
       - "5000:5000"
   redis:
     image: "redis:7-alpine"
+```
 
 Run it with:
 
+```bash
 docker compose up --build
+```
 
 Compose handles networks, volumes, and service orchestration in a single YAML file—perfect for data stacks (e.g., Jupyter + Postgres + Redis).
 
-💬 Contributions welcome! Feel free to open issues or submit PRs to improve this guide.
+---
+
+💬 **Contributions welcome!** Feel free to open issues or submit PRs to improve this guide.
